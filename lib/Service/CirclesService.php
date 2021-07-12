@@ -53,8 +53,8 @@ class CirclesService {
 		}
 
 		try {
-			\OCA\Circles\Api\v1\Circles::getMember($circleId, $userId, 1, true);
-			return true;
+			$member = \OCA\Circles\Api\v1\Circles::getMember($circleId, $userId, 1, true);
+			return $member !== null && $member->getLevel() >= \OCA\Circles\Api\v1\Circles::LEVEL_MEMBER;
 		} catch (\Exception $e) {
 		}
 		return false;

@@ -212,8 +212,10 @@ class PermissionService {
 
 			if ($this->circlesEnabled && $acl->getType() === Acl::PERMISSION_TYPE_CIRCLE) {
 				try {
-					\OCA\Circles\Api\v1\Circles::getMember($acl->getParticipant(), $this->userId, 1, true);
-					return $acl->getPermission($permission);
+					$member = \OCA\Circles\Api\v1\Circles::getMember($acl->getParticipant(), $this->userId, 1, true);
+					return 	$member !== null
+						&& $member->getLevel() >= \OCA\Circles\Api\v1\Circles::LEVEL_MEMBER
+						&& $acl->getPermission($permission);
 				} catch (\Exception $e) {
 					$this->logger->info('Member not found in circle that was accessed. This should not happen.');
 				}
